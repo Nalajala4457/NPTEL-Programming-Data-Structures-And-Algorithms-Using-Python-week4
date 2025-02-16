@@ -1,0 +1,28 @@
+def rainaverage(l):
+    city_rainfall = {}
+    city_count = {}
+    
+    for city, rainfall in l:
+        if city in city_rainfall:
+            city_rainfall[city] += rainfall
+            city_count[city] += 1
+        else:
+            city_rainfall[city] = rainfall
+            city_count[city] = 1
+    
+    result = [(city, city_rainfall[city] / city_count[city]) for city in sorted(city_rainfall.keys())]
+    return result
+
+
+def flatten(l):
+    result = []
+    
+    def helper(sublist):
+        for item in sublist:
+            if isinstance(item, list):
+                helper(item)
+            else:
+                result.append(item)
+    
+    helper(l)
+    return result

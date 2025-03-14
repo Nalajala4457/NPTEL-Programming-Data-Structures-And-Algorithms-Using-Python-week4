@@ -1,0 +1,29 @@
+import sys
+
+def min_distance_to_kill_dragons(R, C, K, D, dragons):
+    dragons.sort()  # Sort dragons by row
+    dp = [[sys.maxsize] * (K + 1) for _ in range(D + 1)]
+    
+    # Base case: Distance to reach the first dragon
+    for i in range(D):
+        r, c = dragons[i]
+        dp[i][1] = r + abs(c)  # Steps to reach the first dragon
+    
+    # Dynamic programming to compute mindist(i, j)
+    for j in range(2, K + 1):  # Number of dragons to kill
+        for i in range(j - 1, D):  # Dragon index
+            r1, c1 = dragons[i]
+            for p in range(j - 2, i):  # Previous dragon
+                r2, c2 = dragons[p]
+                distance = dp[p][j - 1] + (r1 - r2) + abs(c1 - c2)
+                dp[i][j] = min(dp[i][j], distance)
+    
+    # Find the minimum distance to kill K dragons
+    return min(dp[i][K] for i in range(K - 1, D))
+
+# Reading input
+R, C, K, D = map(int, input().split())
+dragons = [tuple(map(int, input().split())) for _ in range(D)]
+
+# Compute and print the result
+print(min_distance_to_kill_dragons(R, C, K, D, dragons))
